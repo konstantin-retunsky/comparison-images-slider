@@ -1,67 +1,64 @@
-const inputDown = ('ontouchstart' in document.documentElement)
-	? 'touchstart'
-	: 'mousedown'
-const inputMove = ('ontouchmove' in document.documentElement)
-	? 'touchmove'
-	: 'mousemove'
-const inputUp = ('ontouchend' in document.documentElement)
-	? 'touchend'
-	: 'mouseup'
+document.addEventListener("DOMContentLoaded", function (e) {
+	const inputDown =
+		"ontouchstart" in document.documentElement ? "touchstart" : "mousedown"
+	const inputMove =
+		"ontouchmove" in document.documentElement ? "touchmove" : "mousemove"
+	const inputUp =
+		"ontouchend" in document.documentElement ? "touchend" : "mouseup"
 
-const slider = document.querySelector(".comparison-images-slider__images-block")
-const comparisonImage = document.querySelector(".comparison-images-slider__comparison-img-wrapper")
+	const slider = document.querySelector(
+		".comparison-images-slider__images-block"
+	)
+	const comparisonImage = document.querySelector(
+		".comparison-images-slider__comparison-img-wrapper"
+	)
 
-const sliderRange = document.querySelector('.comparison-images-slider__range-block')
-const circle = document.querySelector('.comparison-images-slider__range-circle')
-const leftSide = circle.previousElementSibling
+	const sliderRange = document.querySelector(
+		".comparison-images-slider__range-block"
+	)
+	const circle = document.querySelector(
+		".comparison-images-slider__range-circle"
+	)
+	const leftSide = circle.previousElementSibling
 
-let x = 0
-let leftWidth = 0
+	const changeWidth = (eventMove) => {
+		let newWidthImg =
+			(slider.offsetWidth - (eventMove.pageX - slider.offsetLeft)) / slider.offsetWidth *	100
 
-const changeWidth = (newWidth) => {
-  leftSide.style.width = `${newWidth}%`
-	comparisonImage.style.width = `${newWidth}%`
-}
+		let newWidthRange =
+			(eventMove.pageX - sliderRange.offsetLeft - circle.offsetWidth / 2) /	sliderRange.offsetWidth *	100
 
-const sliderMouseDownHandler = function(eventDown) {
-	slider.addEventListener('mousemove', sliderMouseMoveHandler);
-	slider.addEventListener('mouseup', sliderMouseUpHandler);
-}
+		leftSide.style.width = `${Math.min(Math.max(newWidthRange, 0), 100)}%`
+		comparisonImage.style.width = `${Math.min(Math.max(newWidthImg, 0), 100)}%`
+	}
 
-const sliderMouseMoveHandler = function(eventMove) {
-	let newWidth = Math.min(Math.max(((eventMove.pageX - this.offsetLeft) / this.offsetWidth) * 100, 0), 100)
-	changeWidth(newWidth)
-}
+	const MouseMoveHandler = function (eventMove) {
+		changeWidth(eventMove)
+	}
 
-const sliderMouseUpHandler = function(eventClickUp) {
-	slider.removeEventListener('mousemove', sliderMouseMoveHandler);
-	slider.removeEventListener('mouseup', sliderMouseUpHandler);
-}
+	const MouseUpHandler = function (eventUp) {
+		this.removeEventListener(inputMove, MouseMoveHandler)
+		this.removeEventListener(inputUp, MouseUpHandler)
+	}
 
-slider.addEventListener(inputDown, sliderMouseDownHandler)
+	const DownHandler = function (eventDown) {
+		if (this === slider) {
+			changeWidth(eventDown)
+			slider.addEventListener(inputMove, MouseMoveHandler)
+			slider.addEventListener(inputUp, MouseUpHandler)
+		} else {
+			document.addEventListener(inputMove, MouseMoveHandler)
+			document.addEventListener(inputUp, MouseUpHandler)
+		}
+	}
 
-const mouseDownHandler = function(e) {
-  x = e.clientX
-  leftWidth = leftSide.getBoundingClientRect().width
+	slider.addEventListener(inputDown, DownHandler)
+	circle.addEventListener(inputDown, DownHandler)
 
-  document.addEventListener(inputMove, mouseMoveHandler)
-  document.addEventListener(inputUp, mouseUpHandler)
-}
-
-const mouseMoveHandler = function(e) {
-  const dx = e.clientX - x
-
-  const containerWidth = circle.parentNode.getBoundingClientRect().width
-  let newWidth = Math.min(Math.max((leftWidth + dx) * 100 / containerWidth, 0), 100)
-
-	changeWidth(newWidth)
-}
-
-const mouseUpHandler = function() {
-  document.removeEventListener(inputMove, mouseMoveHandler)
-  document.removeEventListener(inputUp, mouseUpHandler)
-}
-
-circle.addEventListener(inputDown, mouseDownHandler)
-// slider.addEventListener('focus', (event) => {
-// });
+	
+	// circle.addEventListener('focus', (event) => {
+	// 	comparisonImage.style.transition = "width 2s"
+	// 	document.addEventListener('keypress', (event) => {})
+	// 	circle.addEventListener('focusout', (event) => {})
+	// })
+})
