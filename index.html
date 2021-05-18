@@ -11,10 +11,51 @@
 
     <section class="comparison-images-slider">
       <div class="comparison-images-slider__images-block">
-        <img class="comparison-images-slider__alpha-img" src="cat-before.png">
-        <div class="comparison-images-slider__comparison-img-wrapper">
-          <img src="cat-after.png" class="comparison-images-slider__comparison-img">
-        </div>
+        <picture class="comparison-images-slider__img-before-wrapper">
+          <source
+						type="image/webp"
+						media="(min-width: 768px)"
+						srcset="img/cat-before-768px.webp 1x,
+										img/cat-before-768px@2x.webp 2x">
+          <source
+						media="(min-width: 768px)"
+						srcset="img/cat-before-768px.jpg 1x,
+										img/cat-before-768px@2x.jpg 2x">
+          <source
+						media="(min-width: 0)"
+						srcset="img/cat-before-320px.webp 1x,
+										img/cat-before-320px@2x.webp 2x">
+          <img
+						class="comparison-images-slider__img-before"
+						src="img/cat-before-320px.jpg"
+						srcset="img/cat-before-320px.jpg 1x,
+									jimg/cat-before-320px@2x.jpg 2x"
+						alt="Кошка до приниятия Cat Energy"
+          >
+        </picture>
+
+        <picture class="comparison-images-slider__img-after-wrapper">
+          <source
+						type="image/webp"
+						media="(min-width: 768px)"
+						srcset="img/cat-after-768px.webp 1x,
+										img/cat-after-768px@2x.webp 2x">
+          <source
+						media="(min-width: 768px)"
+						srcset="img/cat-after-768px.jpg 1x,
+										img/cat-after-768px@2x.jpg 2x">
+          <source
+						media="(min-width: 0)"
+						srcset="img/cat-after-320px.webp 1x,
+										img/cat-after-320px@2x.webp 2x">
+          <img
+						class="comparison-images-slider__img-after"
+						src="img/cat-after-320px.jpg"
+						srcset="img/cat-after-320px.jpg 1x,
+									jimg/cat-after-320px@2x.jpg 2x"
+						alt="Кошка после приниятия Cat Energy"
+					>
+        </picture>
       </div>
 
       <div class="comparison-images-slider__range-block">

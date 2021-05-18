@@ -9,10 +9,13 @@ document.addEventListener("DOMContentLoaded", function (e) {
 	const slider = document.querySelector(
 		".comparison-images-slider__images-block"
 	)
-	const comparisonImage = document.querySelector(
-		".comparison-images-slider__comparison-img-wrapper"
-	)
 
+	const imgAfter = document.querySelector(
+		".comparison-images-slider__img-after-wrapper"
+	)
+	const imgBefore = document.querySelector(
+		".comparison-images-slider__img-before-wrapper"
+	)
 	const sliderRange = document.querySelector(
 		".comparison-images-slider__range-block"
 	)
@@ -23,13 +26,19 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
 	const changeWidth = (eventMove) => {
 		let newWidthImg =
-			(slider.offsetWidth - (eventMove.pageX - slider.offsetLeft)) / slider.offsetWidth *	100
+			((slider.offsetWidth - (eventMove.pageX - slider.getBoundingClientRect().left)) /
+				slider.offsetWidth) *
+			100
 
 		let newWidthRange =
-			(eventMove.pageX - sliderRange.offsetLeft - circle.offsetWidth / 2) /	sliderRange.offsetWidth *	100
+			((eventMove.pageX - sliderRange.getBoundingClientRect().left - circle.offsetWidth / 2) /
+				sliderRange.offsetWidth) *
+			100
 
 		leftSide.style.width = `${Math.min(Math.max(newWidthRange, 0), 100)}%`
-		comparisonImage.style.width = `${Math.min(Math.max(newWidthImg, 0), 100)}%`
+		imgAfter.style.width = `${Math.min(Math.max(newWidthImg, 0), 100)}%`
+		imgBefore.style.width = `${Math.min(Math.max(100 - newWidthImg, 0), 100)}%`
+		console.log(imgBefore)
 	}
 
 	const MouseMoveHandler = function (eventMove) {
@@ -55,7 +64,6 @@ document.addEventListener("DOMContentLoaded", function (e) {
 	slider.addEventListener(inputDown, DownHandler)
 	circle.addEventListener(inputDown, DownHandler)
 
-	
 	// circle.addEventListener('focus', (event) => {
 	// 	comparisonImage.style.transition = "width 2s"
 	// 	document.addEventListener('keypress', (event) => {})
